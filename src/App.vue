@@ -1,26 +1,135 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <form class="review">
+    <h1>How would you rate your service with us?</h1>
+    <RatingNumber @user-rate-number="getRatingNumber($event)" />
+    <RatingInput @add-data="getComment($event)" />
+  </form>
+
+  <div class="review-output" v-if="retrievedData.length !== 0">
+    <ReviewOutput
+      :reviewData="retrievedData"
+      @delete-review="deleteReview($event)"
+    />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import RatingNumber from "@/components/RatingNumber";
+import RatingInput from "@/components/RatingInput";
+import ReviewOutput from "@/components/ReviewOutput";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    RatingNumber,
+    RatingInput,
+    ReviewOutput,
+  },
+  data() {
+    return {
+      ratingNumber: "",
+      comment: "",
+      reviewData: [],
+      id: 0,
+      retrievedData: [],
+    };
+  },
+  methods: {
+    getComment(comment) {
+      this.comment = comment;
+      let date = new Date();
+      this.id += 1;
+
+      // adding the user comment to the array
+      this.reviewData.push({
+        id: this.id,
+        rateNumber: this.ratingNumber,
+        comment: this.comment,
+        datePosted: date.toDateString(),
+      });
+
+      // adding the reviewData array to the local Storage
+      this.addReview(this.reviewData);
+      this.ratingNumber = '';
+      this.comment = ''
+      this.displayReview();
+    },
+    getRatingNumber(num) {
+      this.ratingNumber = num;
+    },
+    addReview(data) {
+      if (localStorage.getItem("reviewly") !== null) {
+        let storedData = JSON.parse(localStorage.getItem("reviewly"));
+        storedData.push(data[data.length - 1]);
+        localStorage.setItem("reviewly", JSON.stringify(storedData));
+      } else {
+        let convertedData = JSON.stringify(data);
+        localStorage.setItem("reviewly", convertedData);
+      }
+    },
+    displayReview() {
+      let returnedData = JSON.parse(localStorage.getItem("reviewly"));
+
+      this.retrievedData = returnedData;
+    },
+    deleteReview(id) {
+      // fetching the reviews from local storage
+      let storedData = JSON.parse(localStorage.getItem("reviewly"));
+
+      let filteredReview = storedData.filter((item) => item.id !== id)
+
+      localStorage.setItem('reviewly', JSON.stringify(filteredReview));
+
+      this.displayReview();
+    },
+  },
+  mounted() {
+    this.displayReview();
+  },
+};
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "montserrat", sans-serif;
+}
+
+body {
+  background-color: $darker-blue;
+  width: 100%;
+  display: block;
+
+  .review {
+    display: block;
+    margin: 20px auto;
+    width: 70%;
+    background-color: $gray;
+    border-radius: 10px;
+    padding: 20px 0;
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      text-align: center;
+      padding: 20px 0;
+      color: #333;
+      text-transform: capitalize;
+    }
+  }
+
+  .comments {
+    display: block;
+    margin: 20px auto;
+    width: 80%;
+  }
+
+  .review-output {
+    width: 70%;
+    margin: 50px auto 20px;
+    display: block;
+  }
 }
 </style>
