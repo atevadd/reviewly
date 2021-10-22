@@ -44,7 +44,7 @@ export default {
       let date = new Date();
       this.id += 1;
 
-      // adding the user comment to the array
+      // adding the user review to the array
       this.reviewData.push({
         id: this.id,
         rateNumber: this.ratingNumber,
@@ -52,10 +52,10 @@ export default {
         datePosted: date.toDateString(),
       });
 
-      // adding the reviewData array to the local Storage
+      // adding the reviewData array to local Storage
       this.addReview(this.reviewData);
-      this.ratingNumber = '';
-      this.comment = ''
+      this.ratingNumber = "";
+      this.comment = "";
       this.displayReview();
     },
     getRatingNumber(num) {
@@ -72,17 +72,25 @@ export default {
       }
     },
     displayReview() {
+      // retriving the stored reviews from local storage
       let returnedData = JSON.parse(localStorage.getItem("reviewly"));
 
-      this.retrievedData = returnedData;
+      // checking if the retrieved data exists
+      if (returnedData === null) { 
+        //sets retrievedData variable to an empty array if its null.
+        this.retrievedData = []; 
+      } else {
+        // sets retrievedData to the existing array.
+        this.retrievedData = returnedData;
+      }
     },
     deleteReview(id) {
       // fetching the reviews from local storage
       let storedData = JSON.parse(localStorage.getItem("reviewly"));
 
-      let filteredReview = storedData.filter((item) => item.id !== id)
+      let filteredReview = storedData.filter((item) => item.id !== id);
 
-      localStorage.setItem('reviewly', JSON.stringify(filteredReview));
+      localStorage.setItem("reviewly", JSON.stringify(filteredReview));
 
       this.displayReview();
     },
@@ -114,13 +122,13 @@ body {
     border-radius: 10px;
     padding: 20px 0;
 
-    @include mobile{
+    @include mobile {
       width: 100%;
       margin: 0;
       padding: 10px;
       border-radius: 0;
     }
-    @include tablet{
+    @include tablet {
       width: 85%;
       padding: 10px;
       border-radius: 10px;
@@ -136,17 +144,16 @@ body {
     }
   }
 
-
   .review-output {
     width: 70%;
     margin: 50px auto 20px;
     display: block;
 
-    @include mobile{
+    @include mobile {
       width: 90%;
     }
 
-    @include tablet{
+    @include tablet {
       width: 85%;
     }
   }
