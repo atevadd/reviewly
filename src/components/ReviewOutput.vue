@@ -15,7 +15,9 @@ export default {
   emits:['delete-review'],
   methods:{
     deleteReview(id){
-      this.$emit('delete-review', id);
+      if(confirm("Do you want to delete this review")){
+        this.$emit('delete-review', id);
+      }
     }
   }
 }
@@ -46,6 +48,15 @@ export default {
       position: absolute;
       top: -15px;
       left: -15px;
+      color: #fff;
+
+      @include mobile{
+        width: 40px;
+        height: 40px;
+        top: -10px;
+        left: -10px;
+        font-weight: 600;
+      }
     }
     .review-comment{
       display: block;
@@ -62,6 +73,13 @@ export default {
       font-size: 1.4rem;
       cursor: pointer;
       transition: visibility .25s ease;
+
+      @include mobile{
+        visibility: visible;
+      }
+      @include tablet{
+        visibility: visible;
+      }
 
       &:hover{
         color: #fc2e2e;

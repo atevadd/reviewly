@@ -1,6 +1,6 @@
 <template>
   <div class="review-comment">
-    <input type="text" @keyup="validateData"  name="comment" id="comment" v-model="comment" placeholder="What do you have to say about our service" autocomplete="off">
+    <input type="text" @keyup="validateData"  name="comment" id="comment" v-model="comment" placeholder="What do you have to say?" autocomplete="off">
     <small id="error" class="submit-error">Review comment cannot be empty</small>
     <button type="submit" @click.prevent="review">Send</button>
   </div>
@@ -22,6 +22,7 @@ export default {
       }else{
         document.getElementById('comment').classList.remove('error');
         this.$emit('add-data', this.comment);
+        this.commit = '';
       }
     },
     validateData(){
@@ -39,6 +40,10 @@ export default {
     position: relative;
     margin: 40px auto;
 
+    @include mobile{
+      width: 100%;
+    }
+
     input{
       display: block;
       position: relative;
@@ -51,6 +56,10 @@ export default {
       color: #171717;
       font-size: .9rem;
       font-family: inherit;
+
+      @include mobile{
+        padding: 0 100px 0 10px;
+      }
 
       &:focus{
         border: 2px solid #171717;
@@ -84,6 +93,10 @@ export default {
       border-radius: 5px;
       cursor: pointer;
       transition: .2s ease;
+
+      @include mobile{
+        padding: 10px 15px;
+      }
 
       &:hover{
         background-color: darken($color: $pink, $amount: 10%);

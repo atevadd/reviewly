@@ -1,16 +1,20 @@
 <template>
+  <!-- The review app input fields starts here -->
   <form class="review">
     <h1>How would you rate your service with us?</h1>
     <RatingNumber @user-rate-number="getRatingNumber($event)" />
     <RatingInput @add-data="getComment($event)" />
   </form>
+  <!-- ends here -->
 
+  <!-- The review output starts here -->
   <div class="review-output" v-if="retrievedData.length !== 0">
     <ReviewOutput
       :reviewData="retrievedData"
       @delete-review="deleteReview($event)"
     />
   </div>
+  <!-- ends here       -->
 </template>
 
 <script>
@@ -110,6 +114,18 @@ body {
     border-radius: 10px;
     padding: 20px 0;
 
+    @include mobile{
+      width: 100%;
+      margin: 0;
+      padding: 10px;
+      border-radius: 0;
+    }
+    @include tablet{
+      width: 85%;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
     h1 {
       font-size: 1.6rem;
       font-weight: 600;
@@ -120,16 +136,19 @@ body {
     }
   }
 
-  .comments {
-    display: block;
-    margin: 20px auto;
-    width: 80%;
-  }
 
   .review-output {
     width: 70%;
     margin: 50px auto 20px;
     display: block;
+
+    @include mobile{
+      width: 90%;
+    }
+
+    @include tablet{
+      width: 85%;
+    }
   }
 }
 </style>

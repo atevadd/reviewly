@@ -31,6 +31,7 @@ export default {
 };
 </script>
 
+
 <style scoped lang="scss">
 .review-number {
   width: 80%;
@@ -40,6 +41,20 @@ export default {
   align-items: center;
   justify-content: space-between;
   position: relative;
+
+  @include mobile {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  @include tablet {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
 
   .number {
     position: relative;
